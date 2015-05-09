@@ -37,16 +37,9 @@ var npwd = {
 		stdout.clearLine()
 		stdout.cursorTo(0)
 		stdout.write(npwd.msg[0] + c)
-		var t = setInterval(function() {
-			c--
-			if (c == 0) {
-				clearInterval(t)
-				clipbd.copy('', cbk)
-				return false
-			}
-			stdout.clearLine()
-			stdout.cursorTo(0)
-			stdout.write(npwd.msg[0] + c)
+		setTimeout(function() {
+			c? npwd.inClipbd(--c, cbk)
+			:  clipbd.copy('', cbk)
 		}, 1000)
 	},
 	clear: function() {
@@ -60,13 +53,14 @@ var npwd = {
 }
 
 npwd.prompt(function(err, res) {
-	var l = ['|', '/', '—', '\\']
-	var i = 0
+	var l = [1, 0x7c, 0x2f, 0x2014, 0x5c]
 	var t = setInterval(function() {
-		(i == 4)? i = 0 : 0
+		(l[0] == 5)? l[0] = 1 : 0
 		stdout.clearLine()
 		stdout.cursorTo(0)
-		stdout.write(l[i]); i++
+		stdout.write(String.fromCharCode(
+			l[l[0]++]
+		))
 	}, 83)
 	res.acc = res.acc.toLowerCase()
 	npwd.scrypt(res, function(pwd) {
