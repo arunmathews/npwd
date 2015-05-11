@@ -17,18 +17,21 @@ var npwd = {
 		)
 	},
 	prompt: function(cbk) {
+		if (/linux/i.test(process.platform)) {
+			stdout.write(npwd.msg[1] + '\n')
+		}
 		prompt.message = 'npwd'.blue
-		prompt.delimiter = '>'
+		prompt.delimiter = '>'.reset
 		prompt.start()
 		prompt.get({properties: {
 			key: {
 				hidden: true,
-				message: 'key',
+				message: 'key'.reset,
 				required: true
 			},
 			acc: {
 				hidden: false,
-				message: 'account',
+				message: 'account'.reset,
 				required: true
 			}
 		}}, cbk)
@@ -48,7 +51,8 @@ var npwd = {
 		process.exit()
 	},
 	msg: [
-		'In clipboard!'.bgGreen + ' '
+		'In clipboard!'.bgGreen.white + ' ',
+		'Linux detected. Make sure xclip is installed.'
 	]
 }
 
@@ -64,7 +68,7 @@ npwd.prompt(function(err, res) {
 	}, 83)
 	res.acc = res.acc.toLowerCase()
 	npwd.scrypt(res, function(pwd) {
-		clipbd.copy(pwd, function() {
+		clipbd.copy(pwd, function(err) {
 			clearInterval(t)
 			npwd.inClipbd(15, npwd.clear)
 		})
