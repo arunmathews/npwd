@@ -68,7 +68,7 @@ npwd.prompt(function(err, res) {
 	}, 83)
 	res.acc = res.acc.toLowerCase()
 	npwd.scrypt(res, function(pwd) {
-		clipbd.copy(pwd, function(err) {
+		clipbd.copy(pwd, function() {
 			clearInterval(t)
 			npwd.inClipbd(15, npwd.clear)
 		})
