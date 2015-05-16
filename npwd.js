@@ -13,7 +13,7 @@ var npwd = {
 		var n = 'npwd'
 		return scrypt(
 			res.key,n+res.acc+n,
-			17,8,16,800,cbk,'hex'
+			17,8,16,800,cbk,'base64'
 		)
 	},
 	prompt: function(cbk) {
