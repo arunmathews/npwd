@@ -33,7 +33,12 @@ var npwd = {
 				hidden: false,
 				message: 'account'.reset,
 				required: true
-			}
+			},
+            length: {
+                hidden: false,
+                message: 'length'.reset,
+                required: false
+            }
 		}}, cbk)
 	},
 	inClipbd: function(c, cbk) {
@@ -66,10 +71,13 @@ npwd.prompt(function(err, res) {
 			l[l[0]++]
 		))
 	}, 83)
-	res.acc = res.acc.toLowerCase()
+	res.acc = res.acc.toLowerCase();
 	npwd.scrypt(res, function(pwd) {
+	    if (res.length) {
+	        pwd = pwd.substring(0, res.length);
+        }
 		clipbd.copy(pwd, function() {
-			clearInterval(t)
+			clearInterval(t);
 			npwd.inClipbd(15, npwd.clear)
 		})
 	})
